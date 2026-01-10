@@ -45,26 +45,30 @@ Analyze the current conversation to extract learnings from mistakes or correctio
 
 ## Example
 
-File: `docs/learnings/2025-01-15-expo-sdk-version.md`
+File: `docs/learnings/2025-01-10-expo-project-setup.md`
 
 ```markdown
-# Use Expo SDK 50+ for new React Native projects
+# Use create-expo-app for new Expo projects
 
 ## Consult when
-Creating a new Expo project, initializing a React Native app with Expo, or upgrading an existing Expo project.
+Creating a new Expo project, initializing a React Native app with Expo, or setting up project configuration.
 
 ## Context
-Creating a new React Native app using Expo with the default template.
+Creating a new React Native app using Expo by manually writing package.json and app.json.
 
 ## Problem
-The app failed to load in Expo Go with SDK version compatibility errors. The default template used an older SDK version that wasn't supported by the current Expo Go app.
+Manually created package.json with SDK 51 packages, but the user's Expo Go was SDK 54. This caused a cascade of issues:
+- SDK version mismatch errors
+- Missing babel-preset-expo
+- react-native-maps requiring native code unavailable in Expo Go
+- Missing asset files referenced in app.json
 
 ## Resolution
-Updated `app.json` to specify SDK 50, ran `expo upgrade`, and reinstalled dependencies.
+Updated all packages to SDK 54 versions, removed native-only packages, created placeholder assets, and installed missing dependencies.
 
 ## Guidance
-**Do:** Use Expo SDK 50 or higher. Verify the SDK version in `app.json` and run `expo upgrade` if starting from an older template.
-**Avoid:** SDK 52 and lower—these cause compatibility errors with the current Expo Go app and won't load.
+**Do:** Use `npx create-expo-app` to scaffold new projects—it automatically handles SDK alignment, assets, babel config, and compatible dependencies.
+**Avoid:** Manually writing package.json and app.json for Expo projects. Too many interdependencies (SDK version, babel preset, assets, native vs JS packages) that are easy to get wrong.
 ```
 
 ## Index Format
@@ -84,7 +88,7 @@ Before starting a task, scan the categories below for relevant learnings. Read t
 ## React Native / Expo
 | Consult when | Learning |
 |--------------|----------|
-| Creating or upgrading an Expo project | [2025-01-15-expo-sdk-version.md](./2025-01-15-expo-sdk-version.md) |
+| Creating a new Expo project | [2025-01-10-expo-project-setup.md](./2025-01-10-expo-project-setup.md) |
 
 ## API / Backend
 | Consult when | Learning |
