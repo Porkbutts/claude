@@ -39,7 +39,8 @@ Analyze the current conversation to extract learnings from mistakes or correctio
 <How it was fixed - include code/commands if relevant>
 
 ## Guidance
-<Actionable advice for future sessions - the key takeaway>
+**Do:** <What to do instead - the correct approach>
+**Avoid:** <What not to do - explicitly name the anti-pattern and why>
 ```
 
 ## Example
@@ -62,7 +63,8 @@ The app failed to load in Expo Go with SDK version compatibility errors. The def
 Updated `app.json` to specify SDK 50, ran `expo upgrade`, and reinstalled dependencies.
 
 ## Guidance
-When creating new Expo projects, always verify the SDK version in `app.json` is 50 or higher. Run `expo upgrade` if starting from an older template.
+**Do:** Use Expo SDK 50 or higher. Verify the SDK version in `app.json` and run `expo upgrade` if starting from an older template.
+**Avoid:** SDK 52 and lower—these cause compatibility errors with the current Expo Go app and won't load.
 ```
 
 ## Index Format
@@ -111,3 +113,4 @@ When adding a new learning, find (or create) the appropriate category and add a 
 - **Make it actionable**: The guidance should be something Claude can act on
 - **One learning per file**: Keep each learning focused on a single issue
 - **Write activity-based triggers**: Frame "Consult when" around what Claude is about to *do*, not what error it might *see*. "Creating an Expo project" matches during planning; "SDK compatibility errors" only matches after failure
+- **Use do/avoid framing**: Include both what to do AND what to avoid. "Use SDK 50+" tells Claude the right path; "Avoid SDK 52 and lower" explicitly marks the anti-pattern. Both framings help Claude recognize the boundary
