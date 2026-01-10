@@ -19,12 +19,15 @@ Analyze the current conversation to extract learnings from mistakes or correctio
 
 5. **Write the learning**: Use the format below
 
-6. **Update the index**: Add an entry to `docs/learnings/INDEX.md` mapping the problem type to the learning doc. Create the index if it doesn't exist (see Index Format below)
+6. **Update the index**: Add an entry to `docs/learnings/INDEX.md` with an activity-based trigger so Claude consults this learning proactively during planning. Create the index if it doesn't exist (see Index Format below)
 
 ## Learning Format
 
 ```markdown
 # <Clear, actionable title>
+
+## Consult when
+<Activity-based trigger for proactive use - what task/activity should prompt reading this? e.g., "Creating a new Expo project", "Setting up authentication", "Writing database migrations">
 
 ## Context
 <What was being attempted - 1-2 sentences>
@@ -46,6 +49,9 @@ File: `docs/learnings/2025-01-15-expo-sdk-version.md`
 ```markdown
 # Use Expo SDK 50+ for new React Native projects
 
+## Consult when
+Creating a new Expo project, initializing a React Native app with Expo, or upgrading an existing Expo project.
+
 ## Context
 Creating a new React Native app using Expo with the default template.
 
@@ -61,41 +67,41 @@ When creating new Expo projects, always verify the SDK version in `app.json` is 
 
 ## Index Format
 
-The index (`docs/learnings/INDEX.md`) maps problem types to learning docs so Claude can quickly find relevant guidance. Include this file in your `CLAUDE.md` or project instructions.
+The index (`docs/learnings/INDEX.md`) maps activities to learning docs so Claude can proactively consult them during planning—before making mistakes. Include this file in your `CLAUDE.md` or project instructions.
 
 ```markdown
 # Learnings Index
 
-Quick reference for common issues and their solutions.
+Consult these learnings **during planning** before starting work. Don't wait until something breaks.
 
 ## How to use this index
-When you encounter a problem, scan the categories below to find relevant learnings.
+Before starting a task, scan the categories below for relevant learnings. Read them first to avoid known pitfalls.
 
 ---
 
 ## React Native / Expo
-| Problem | Learning |
-|---------|----------|
-| SDK version compatibility errors in Expo Go | [2025-01-15-expo-sdk-version.md](./2025-01-15-expo-sdk-version.md) |
+| Consult when | Learning |
+|--------------|----------|
+| Creating or upgrading an Expo project | [2025-01-15-expo-sdk-version.md](./2025-01-15-expo-sdk-version.md) |
 
 ## API / Backend
-| Problem | Learning |
-|---------|----------|
-| (empty) | |
+| Consult when | Learning |
+|--------------|----------|
+| (no learnings yet) | |
 
 ## Testing
-| Problem | Learning |
-|---------|----------|
-| (empty) | |
+| Consult when | Learning |
+|--------------|----------|
+| (no learnings yet) | |
 
 ## Other
-| Problem | Learning |
-|---------|----------|
-| (empty) | |
+| Consult when | Learning |
+|--------------|----------|
+| (no learnings yet) | |
 ```
 
 When adding a new learning, find (or create) the appropriate category and add a row with:
-- **Problem**: A brief description of when to consult this learning (e.g., "SDK version compatibility errors")
+- **Consult when**: An activity-based trigger describing when to read this (e.g., "Creating or upgrading an Expo project", "Setting up JWT authentication", "Writing database migrations")
 - **Learning**: Relative link to the dated learning file
 
 ## Tips for Good Learnings
@@ -104,3 +110,4 @@ When adding a new learning, find (or create) the appropriate category and add a 
 - **Include the why**: Explain *why* the problem occurred, not just what happened
 - **Make it actionable**: The guidance should be something Claude can act on
 - **One learning per file**: Keep each learning focused on a single issue
+- **Write activity-based triggers**: Frame "Consult when" around what Claude is about to *do*, not what error it might *see*. "Creating an Expo project" matches during planning; "SDK compatibility errors" only matches after failure
