@@ -46,8 +46,9 @@ Personal workflow for getting better results out of vibecoding.
 
 **reflect** - Capture learnings from conversation after Claude made mistakes or needed correction. Analyzes what went wrong, how it was resolved, and extracts actionable guidance for future sessions.
 
-- Trigger with `/reflect` or "learn from this" after a back-and-forth where you course-corrected Claude
-- Output: Markdown file with context, problem, resolution, and guidance
+- Trigger with "reflect", "review our mistakes", "learn from this", or similar phrases after a back-and-forth where you course-corrected Claude
+- Output: Dated markdown file (e.g., `2025-01-15-expo-sdk-version.md`) with context, problem, resolution, and guidance
+- Maintains an index (`docs/learnings/INDEX.md`) mapping problem types to learning docs—include this in your `CLAUDE.md` for easy reference
 
 **functional-prototype** - Build functional prototypes from PRDs or specifications. Creates working UI screens with stubbed dependencies (database, APIs) and precanned mock data.
 
