@@ -5,7 +5,7 @@ description: Capture learnings from conversation after Claude made mistakes or n
 
 # Reflect
 
-Analyze the current conversation to extract learnings from mistakes or corrections, then persist them for future sessions.
+Analyze the current conversation to extract learnings from mistakes or corrections, then persist them as "if we were starting over" guidance for future sessions.
 
 ## Workflow
 
@@ -13,7 +13,7 @@ Analyze the current conversation to extract learnings from mistakes or correctio
 
 2. **Trace the resolution**: Follow the back-and-forth to understand how the issue was resolved - what did the user clarify? What fix worked?
 
-3. **Synthesize the learning**: Extract the actionable insight - not just "what happened" but "what should future Claude do differently"
+3. **Synthesize the learning**: Extract the actionable insight - frame it as "if we were starting over, here's the right approach" not "here's how we fixed a mistake"
 
 4. **Ask where to save**: Confirm the file path with the user. Suggest `docs/learnings/YYYY-MM-DD-<topic>.md` (e.g., `docs/learnings/2025-01-15-expo-sdk-version.md`)
 
@@ -23,24 +23,22 @@ Analyze the current conversation to extract learnings from mistakes or correctio
 
 ## Learning Format
 
+Frame the learning as "if we were starting over, here's the right approach"—lead with what to do, not what went wrong.
+
 ```markdown
-# <Clear, actionable title>
+# <Clear, actionable title - state the right approach>
 
 ## Consult when
-<Activity-based trigger for proactive use - what task/activity should prompt reading this? e.g., "Creating a new Expo project", "Setting up authentication", "Writing database migrations">
+<Activity-based trigger - what task should prompt reading this?>
 
-## Context
-<What was being attempted - 1-2 sentences>
+## The right approach
+<What to do from the start. Be specific: commands, patterns, tools. Write this as if advising someone who hasn't started yet.>
 
-## Problem
-<What went wrong and why - be specific>
+## What to avoid
+<The anti-pattern that leads to problems. Name it explicitly so it's recognizable.>
 
-## Resolution
-<How it was fixed - include code/commands if relevant>
-
-## Guidance
-**Do:** <What to do instead - the correct approach>
-**Avoid:** <What not to do - explicitly name the anti-pattern and why>
+## Why this matters
+<Brief explanation of what goes wrong with the anti-pattern. Keep it short—just enough context to understand why the right approach is right.>
 ```
 
 ## Example
@@ -53,22 +51,20 @@ File: `docs/learnings/2025-01-10-expo-project-setup.md`
 ## Consult when
 Creating a new Expo project, initializing a React Native app with Expo, or setting up project configuration.
 
-## Context
-Creating a new React Native app using Expo by manually writing package.json and app.json.
+## The right approach
+Use `npx create-expo-app` to scaffold new projects. This automatically handles:
+- SDK version alignment with Expo Go
+- Babel preset configuration
+- Required asset files (icons, splash screens)
+- Compatible dependency versions
 
-## Problem
-Manually created package.json with SDK 51 packages, but the user's Expo Go was SDK 54. This caused a cascade of issues:
-- SDK version mismatch errors
-- Missing babel-preset-expo
-- react-native-maps requiring native code unavailable in Expo Go
-- Missing asset files referenced in app.json
+Don't manually assemble the project structure—let the scaffolding tool do it.
 
-## Resolution
-Updated all packages to SDK 54 versions, removed native-only packages, created placeholder assets, and installed missing dependencies.
+## What to avoid
+Manually writing package.json and app.json for Expo projects. The interdependencies are too complex to get right by hand.
 
-## Guidance
-**Do:** Use `npx create-expo-app` to scaffold new projects—it automatically handles SDK alignment, assets, babel config, and compatible dependencies.
-**Avoid:** Manually writing package.json and app.json for Expo projects. Too many interdependencies (SDK version, babel preset, assets, native vs JS packages) that are easy to get wrong.
+## Why this matters
+Expo has tight coupling between SDK version, babel preset, asset requirements, and package versions. Manual setup with the wrong SDK version (e.g., SDK 51 when Expo Go runs SDK 54) cascades into version mismatches, missing babel config, and asset errors that require painful debugging to untangle.
 ```
 
 ## Index Format
@@ -112,9 +108,9 @@ When adding a new learning, find (or create) the appropriate category and add a 
 
 ## Tips for Good Learnings
 
-- **Be specific**: "Use SDK 50+" is better than "use a recent SDK"
-- **Include the why**: Explain *why* the problem occurred, not just what happened
-- **Make it actionable**: The guidance should be something Claude can act on
-- **One learning per file**: Keep each learning focused on a single issue
+- **Lead with the right approach**: The learning should read like advice for someone starting fresh, not a debugging post-mortem
+- **Be specific**: "Use `npx create-expo-app`" is better than "use the official scaffolding tool"
+- **Name the anti-pattern explicitly**: Future Claude needs to recognize when it's about to do the wrong thing. "Manually writing package.json" is specific enough to catch
+- **Keep "why this matters" brief**: Just enough context to understand why the right approach is right. The goal isn't to document the debugging journey—it's to prevent it
+- **One learning per file**: Keep each learning focused on a single insight
 - **Write activity-based triggers**: Frame "Consult when" around what Claude is about to *do*, not what error it might *see*. "Creating an Expo project" matches during planning; "SDK compatibility errors" only matches after failure
-- **Use do/avoid framing**: Include both what to do AND what to avoid. "Use SDK 50+" tells Claude the right path; "Avoid SDK 52 and lower" explicitly marks the anti-pattern. Both framings help Claude recognize the boundary
