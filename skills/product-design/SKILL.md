@@ -36,20 +36,23 @@ Probe for edge cases:
 
 Exit when: You could sketch every screen and know what each button does.
 
-### Phase 3: Technical Context (adaptive)
+### Phase 3: Technical Context (always)
 
-Ask only what's relevant. Skip if not applicable.
+Nail down the tech stack. The PRD should specify exactly what to build with.
 
-| Topic | When to ask | Key questions |
-|-------|-------------|---------------|
-| **Auth** | Multi-user apps | Login method? Social auth? Roles/permissions? |
-| **Integrations** | Mentioned or implied | Which services? What data flows between? |
-| **Data** | Complex relationships | What are the core entities? How do they relate? |
-| **Payments** | Transactional apps | Payment provider? Subscription vs one-time? |
-| **Notifications** | User engagement needed | Email? Push? What triggers them? |
-| **Files/Media** | Content-heavy apps | Upload types? Size limits? Storage needs? |
+| Topic | Key questions |
+|-------|---------------|
+| **Frontend** | Web app, mobile (React Native, Flutter, native), or both? Which framework (React, Vue, Next.js, etc.)? |
+| **Backend** | BaaS (Supabase, Firebase, Convex)? Custom API (Node, Python, Go)? Serverless functions? |
+| **Database** | Postgres, MongoDB, SQLite? Managed by BaaS or self-hosted? |
+| **Deployment** | Vercel, Netlify, Railway, Fly.io? App stores for mobile? |
+| **Auth** | Built-in (Supabase Auth, Firebase Auth)? Third-party (Auth0, Clerk)? Social providers needed? |
+| **Integrations** | Which external services? What data flows between? |
+| **Payments** | Stripe, RevenueCat? Subscription vs one-time? |
+| **Notifications** | Email (Resend, SendGrid)? Push? What triggers them? |
+| **Files/Media** | Upload types? Size limits? Storage (S3, Supabase Storage, Cloudinary)? |
 
-Exit when: No technical unknowns that would block implementation.
+Exit when: You could set up the project and install dependencies with no ambiguity.
 
 ### Phase 4: Scope Boundaries (always)
 
@@ -131,8 +134,14 @@ After the interview, produce this document:
 
 ## Technical Context
 
-### Platform
-[Web/Mobile/Both - any specific requirements]
+### Tech Stack
+| Layer | Choice | Notes |
+|-------|--------|-------|
+| **Frontend** | [Framework - e.g., Next.js, React Native] | [Any specific libraries] |
+| **Backend** | [e.g., Supabase, custom Node API] | [Architecture notes] |
+| **Database** | [e.g., Postgres via Supabase] | [Key considerations] |
+| **Auth** | [e.g., Supabase Auth with Google] | [Providers needed] |
+| **Deployment** | [e.g., Vercel, App Store] | [Environments] |
 
 ### Integrations
 | Service | Purpose | Data Flow |
@@ -166,7 +175,7 @@ START
            │
            ▼
 ┌─────────────────────────┐
-│ Phase 3: Technical Ctx  │ ◄── Adaptive. Only relevant topics.
+│ Phase 3: Technical Ctx  │ ◄── Always. Nail down the tech stack.
 └──────────┬──────────────┘
            │
            ▼
@@ -188,4 +197,5 @@ Ready to produce PRD when ALL are true:
 - [ ] Know what every button/action does
 - [ ] Edge cases addressed or explicitly deferred
 - [ ] Clear MVP boundary established
+- [ ] Tech stack fully specified (frontend, backend, database, auth, deployment)
 - [ ] No technical unknowns that block implementation
