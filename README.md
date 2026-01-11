@@ -38,12 +38,6 @@ Personal workflow for getting better results out of vibecoding.
 - Interview phases: Core Concept, User Scenarios, Technical Context, Scope Boundaries
 - Output: Structured PRD with roles, scenarios, acceptance criteria, and technical context
 
-**interview** - Act as a sounding board to clarify user intent through structured questioning. Works for any domain—exploring ideas, processing emotions, refining goals, understanding problems, or planning projects.
-
-- Trigger with `/interview`
-- Adapts approach based on context: idea exploration, emotional processing, goal clarification, problem understanding, or decision making
-- Output: Clear synthesis of insights with optional markdown document
-
 **reflect** - Capture learnings from conversation after Claude made mistakes or needed correction. Frames insights as "if we were starting over" guidance for future sessions.
 
 - Trigger with "reflect", "review our mistakes", "learn from this", or similar phrases after a back-and-forth where you course-corrected Claude
