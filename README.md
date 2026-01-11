@@ -42,18 +42,7 @@ Personal workflow for getting better results out of vibecoding.
 
 - Trigger with "reflect", "review our mistakes", "learn from this", or similar phrases after a back-and-forth where you course-corrected Claude
 - Output: Dated markdown file in `~/.claude/lessons/` (e.g., `2025-01-15-expo-sdk-version.md`) with the right approach and what to avoid
-- Adds an entry to `~/.claude/CLAUDE.md` with an activity-based trigger for proactive consultation during planning
-
-To enable lessons across all projects, add this to `~/.claude/CLAUDE.md`:
-
-```markdown
-## Lessons
-
-Before starting any task, scan this table for relevant lessons. Read the full file when a trigger matches what you're about to do.
-
-| Consult when | Lesson |
-|--------------|--------|
-```
+- Automatically updates `~/.claude/CLAUDE.md` with a lessons table for proactive consultation during planning
 
 **functional-prototype** - Build functional prototypes from PRDs or specifications. Creates working UI screens with stubbed dependencies (database, APIs) and precanned mock data.
 
