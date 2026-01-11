@@ -44,8 +44,7 @@ Personal workflow for getting better results out of vibecoding.
 - Output: Dated markdown file in `~/.claude/lessons/` (e.g., `2025-01-15-expo-sdk-version.md`) with the right approach and what to avoid
 - Automatically updates `~/.claude/CLAUDE.md` with a lessons table for proactive consultation during planning
 
-**functional-prototype** - Build functional prototypes from PRDs or specifications. Creates working UI screens with stubbed dependencies (database, APIs) and precanned mock data.
+**functional-prototype** - Build working prototypes from PRDs with mock data and stubbed integrations to validate flows before full implementation.
 
-- Triggers when you provide a PRD, spec, or feature description and want a clickable prototype
-- Generates realistic mock data and stubbed API functions with simulated delays
-- Output: Working prototype with `docs/next-steps.md` explaining how to replace stubs with real integrations
+- Triggers: "build a prototype", "functional prototype", "make a demo", "implement this PRD", "prototype this spec"
+- Output: Working clickable prototype with `docs/next-steps.md` explaining how to replace stubs with real integrations
