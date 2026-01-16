@@ -52,7 +52,7 @@ grep -E '^\s*- \[(x| |🚧)\]' docs/TASKS.md
 | No `docs/tasks/*.md` | Start Phase 2 |
 | Task marked `🚧` in TASKS.md | Resume that task (check worktree exists) |
 | Worktree exists but task not marked | Mark as `🚧`, resume implementation |
-| Task `[x]` but branch still exists | Just needs merge (step 5) |
+| Task `[x]` but branch still exists | Just needs merge/cleanup (step 7) |
 | Branch exists, worktree missing | Recreate worktree, resume |
 | All tasks `[x]`, no task branches | Complete—nothing to do |
 
@@ -91,8 +91,9 @@ Phase 3: Implementation Loop
     2. Launch task-implementer
     3. Launch code-reviewer
     4. If REQUEST CHANGES → loop back to step 2
-    5. Verify build/tests, merge to main, push
+    5. Verify build/tests pass
     6. Mark [x] in TASKS.md
+    7. Merge to main, cleanup worktree, push
 
 Phase 4: Completion
   → All tasks done, optionally tag release
@@ -133,19 +134,26 @@ Process tasks in the order specified in `docs/TASKS.md`.
    - **APPROVED**: Proceed to step 5
    - **REQUEST CHANGES**: Loop back to step 2 (implementer reads feedback from task-spec)
 
-5. **Verify and merge:**
+5. **Verify build/tests:**
    ```bash
    cd .worktrees/task-<id>
    # Run project's build & test commands (detect from package.json, Makefile, etc.)
    # Must pass - if not, loop to step 2
+   ```
+
+6. **Mark complete:** Change `🚧` to `[x]` in `docs/TASKS.md`
+
+7. **Merge and cleanup:**
+   ```bash
    git checkout main
-   git merge task/<id> --no-ff -m "Merge task/<id>: [title]"
+   # Check if already merged (idempotence)
+   if ! git branch --merged main | grep -q "task/<id>"; then
+     git merge task/<id> --no-ff -m "Merge task/<id>: [title]"
+   fi
    git worktree remove .worktrees/task-<id>
    git branch -d task/<id>
    git remote get-url origin && git push  # Push if remote exists
    ```
-
-6. **Mark complete:** Change `🚧` to `[x]` in `docs/TASKS.md`
 
 ### Parallel Execution
 
