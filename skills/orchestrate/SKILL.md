@@ -150,8 +150,9 @@ Process tasks in the order specified in `docs/TASKS.md`.
    if ! git branch --merged main | grep -q "task/<id>"; then
      git merge task/<id> --no-ff -m "Merge task/<id>: [title]"
    fi
-   git worktree remove .worktrees/task-<id>
-   git branch -d task/<id>
+   # Cleanup (idempotent - check existence first)
+   git worktree list | grep -q "task-<id>" && git worktree remove .worktrees/task-<id>
+   git branch --list "task/<id>" | grep -q . && git branch -d task/<id>
    git remote get-url origin && git push  # Push if remote exists
    ```
 
