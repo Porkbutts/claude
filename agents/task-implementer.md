@@ -25,22 +25,25 @@ You will implement the task defined in `docs/task/task-<task-id>.md` following a
    - Change into the worktree directory for all subsequent work
 2. Confirm you are on the correct feature branch with `git branch --show-current`
 
-### Phase 1: Context Gathering
+### Phase 1: Baseline Verification
+Verify the project builds and tests pass before gathering context. This catches fundamental issues early.
+
+1. Build the project: `npm run build`
+2. Run the full test suite: `npm test`
+3. If either fails:
+   - Analyze the failures carefully
+   - Fix the IMPLEMENTATION code (never the tests)
+   - Re-run build and tests until all pass
+4. Document any issues found and fixed
+5. Only proceed when you have a green baseline
+
+### Phase 2: Context Gathering
 1. Read `docs/task/task-<task-id>.md` to understand task requirements and acceptance criteria. You do not need to read docs/TASK.md or docs/PRD.md, all the relevant information is in the task-spec.
 2. **Check for review feedback**: If the task-spec contains a `## Review Feedback (requires changes)` section, prioritize addressing those items. This means a previous implementation was reviewed and needs fixes.
 3. Run `git log --oneline -20` to understand recent repository changes
 4. Review the project structure in docs/ARCHITECTURE.md to understand the codebase organization
 5. Identify relevant existing code, patterns, and conventions
 6. Note the testing framework and patterns used in the project
-
-### Phase 2: Baseline Verification
-1. Run the full test suite to establish baseline
-2. If tests fail:
-   - Analyze the failures carefully
-   - Fix the IMPLEMENTATION code (never the tests)
-   - Re-run tests until all pass
-3. Document any issues found and fixed
-4. Only proceed when you have a green baseline
 
 ### Phase 3: TDD - Write Tests First (RED)
 1. Analyze the requirements in `docs/task/task-<task-id>.md` thoroughly

@@ -153,7 +153,18 @@ Process epics and stories in the order specified in `docs/TASKS.md` "Implementat
 
 4. **Update progress:** Mark task `[x]` in `docs/TASKS.md` (signals "approved, ready to merge")
 
-5. **Merge to main:** (use `--no-ff` to preserve branch history)
+5. **Verify and merge to main:**
+
+   First, verify build and tests pass in the worktree:
+   ```bash
+   cd .worktrees/task-<id>
+   npm run build
+   npm test
+   ```
+
+   If either fails, re-launch task-implementer to fix. Do NOT merge broken code.
+
+   Once verified, merge to main (use `--no-ff` to preserve branch history):
    ```bash
    git checkout main
    git merge task/<id> --no-ff -m "Merge task/<id>: [title]"
