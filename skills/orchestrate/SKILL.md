@@ -172,6 +172,11 @@ Process epics and stories in the order specified in `docs/TASKS.md` "Implementat
    git branch -d task/<id>
    ```
 
+   Push to remote if it exists:
+   ```bash
+   git remote get-url origin && git push origin main
+   ```
+
 ### Parallel Execution
 
 Tasks within a story MAY run in parallel if:
