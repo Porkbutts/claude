@@ -79,9 +79,9 @@ Personal workflow for getting better results out of vibecoding.
 
 **task-spec-generator** - Generate individual task specification files from TASKS.md. Creates `docs/tasks/task-<id>.md` for each task with full context for implementers.
 
-**qa-visual-verifier** - Visual QA verification using Playwright MCP for screenshot-based testing. Takes screenshots at every step to catch visual regressions, navigates flows as a user would. Auto-selects Google accounts; only pauses for credential-based login flows.
+**qa-verification** - Human-like QA verification using Playwright MCP. Navigates the app like a user, takes screenshots at every step, and flags visual issues (modals off-screen, overlapping elements, broken layouts) even beyond acceptance criteria. Auto-selects Google accounts; pauses only for credential-based login.
 
 - Triggers: "verify this PR", "QA this feature", "visual test", "check the UI", "screenshot test"
-- Works against localhost dev servers or remote URLs
+- Works against localhost, preview/staging, and production URLs
 - Reads task specs from `docs/tasks/task-<id>.md` for acceptance criteria
-- Output: Markdown report with embedded screenshot references showing pass/fail status
+- Output: QA report with acceptance criteria results + additional visual issues found
