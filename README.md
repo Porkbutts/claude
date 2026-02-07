@@ -38,13 +38,6 @@ Personal workflow for getting better results out of vibecoding.
 - Interview phases: Core Concept, User Scenarios, Technical Context, Scope Boundaries
 - Output: Structured PRD with roles, scenarios, acceptance criteria, and technical context
 
-**reflect** - Capture lessons from conversation after Claude made mistakes or needed correction. Frames insights as "if we were starting over" guidance for future sessions.
-
-- Trigger with "reflect", "review our mistakes", "learn from this", or similar phrases after a back-and-forth where you course-corrected Claude
-- Validates the lesson with you before writing to ensure the actual root cause is captured (not red herrings)
-- Output: Dated markdown file in `~/.claude/lessons/` (e.g., `2025-01-15-expo-sdk-version.md`) with the right approach and what to avoid
-- Automatically updates `~/.claude/CLAUDE.md` with a lessons table for proactive consultation during planning
-
 **architecture** - Design technical architecture from a PRD. Transform product requirements into implementation-ready technical specs.
 
 - Use when you want to create an architecture document, define system design, or plan technical implementation
@@ -71,26 +64,37 @@ Personal workflow for getting better results out of vibecoding.
 - Enforces high code coverage thresholds (80%) appropriate for LLM coding agents
 - Detects existing config and only adds what's missing
 
-**orchestrate** - End-to-end project orchestration from idea to implementation.
+**task-implementation** - Implement a task end-to-end: read task spec, create git worktree, write tests (TDD), implement feature, verify coverage thresholds, update docs, push branch, and create PR.
+
+- Triggers: "implement task 1.2.3", "work on the auth task", "build task 3.1.1"
+- Reads task specs from `docs/tasks/task-<id>.md` (falls back to `docs/TASKS.md`)
+- Reads `docs/PRD.md`, `docs/ARCHITECTURE.md` for context; `docs/BRAND-GUIDELINES.md` for UI work
+- Strict TDD: writes failing tests first, then implements minimum code to pass
+- Enforces 80% coverage thresholds (statements, branches, functions, lines)
+- Handles review feedback loops (reads `## Review Feedback` section from task spec)
+- Ships: commits, pushes feature branch, creates PR with `gh`
+
+**review-pr** - Review pull requests against task specifications.
+
+- Triggers: "review PR", "code review", "is this ready to merge", "check my PR"
+- Reads task spec and branch diff, verifies acceptance criteria, audits test coverage
+- Checks for correctness, security (OWASP top 10), architectural adherence, and scope creep
+- Output: Structured verdict (APPROVE / REQUEST CHANGES) with evidence per criterion and a Manual QA Checklist
+
+**agent-orchestration** - End-to-end project orchestration from idea to implementation.
 
 - Triggers: "build this app", "implement an MVP", or when you want full project automation
 - Coordinates: product-design → architecture → task-decomposition skills
-- Delegates to: task-spec-generator, task-implementer, and code-reviewer agents
+- Delegates to: task-spec-generator, task-implementer, code-reviewer, and qa-verifier agents
+- Implementation loop: implement → code review → fix feedback → QA verify → merge
 - Resumable: introspects filesystem and git state to pick up where it left off if interrupted
-- Handles parallel task execution where dependencies allow
-- Verifies build and tests pass before merging each task to main
 
 #### Agents
 
-**task-implementer** - Implement tasks using TDD workflow. Creates git worktree, verifies build and tests pass (baseline check), then writes tests first, implements feature, and commits. Reads task specs from `docs/tasks/task-<id>.md` and handles review feedback loops.
+**task-implementer** - Wraps the task-implementation skill. TDD workflow in isolated git worktrees.
 
-**code-reviewer** - Review code changes against task specifications. Changes to worktree directory, verifies build and tests pass (baseline check), then performs diff, evaluates against requirements, and either approves or writes feedback to task-spec for implementer to address.
+**code-reviewer** - Wraps the review-pr skill. Produces APPROVE/REQUEST CHANGES verdicts and writes feedback to task specs.
+
+**qa-verifier** - Wraps the qa-verification skill. Visual QA via Playwright against Vercel preview URLs.
 
 **task-spec-generator** - Generate individual task specification files from TASKS.md. Creates `docs/tasks/task-<id>.md` for each task with full context for implementers.
-
-**qa-verification** - Human-like QA verification using Playwright MCP. Navigates the app like a user, takes screenshots at every step, and flags visual issues (modals off-screen, overlapping elements, broken layouts) even beyond acceptance criteria. Auto-selects Google accounts; pauses only for credential-based login.
-
-- Triggers: "verify this PR", "QA this feature", "visual test", "check the UI", "screenshot test"
-- Works against localhost, preview/staging, and production URLs
-- Reads task specs from `docs/tasks/task-<id>.md` for acceptance criteria
-- Output: QA report with acceptance criteria results + additional visual issues found

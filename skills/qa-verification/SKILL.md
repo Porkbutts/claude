@@ -5,7 +5,14 @@ description: QA verification skill that tests like a human QA would — navigati
 
 # QA Verification
 
-Test like a human QA — navigate the app, look at the screen, and flag what looks wrong.
+**Always launch the `qa-verifier` agent via the Task tool.** Do not execute this workflow inline — it runs in a subagent to keep the main context clean.
+
+```
+Task agent: qa-verifier
+Prompt: "Verify manual QA checklist for PR #<number> against docs/tasks/task-<id>.md"
+```
+
+The workflow below is reference for the agent, not for direct execution.
 
 ## Core Rules
 
