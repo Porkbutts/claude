@@ -1,9 +1,9 @@
 ---
-name: orchestrate
-description: End-to-end project orchestration from idea to implementation. Use when user wants to build a complete project, implement an MVP, or says "build this app/feature". Coordinates product-design, architecture, task-decomposition skills, then delegates to task-spec-generator, task-implementer, and code-reviewer agents for execution. Resumable—introspects filesystem and git state to pick up where it left off if interrupted.
+name: agent-orchestration
+description: End-to-end project orchestration from idea to implementation. Use when user wants to build a complete project, implement an MVP, or says "build this app/feature". Coordinates product-design, architecture, task-decomposition skills, then delegates to task-spec-generator agent, task-implementation skill, and code-reviewer agent for execution. Resumable—introspects filesystem and git state to pick up where it left off if interrupted.
 ---
 
-# Orchestrate
+# Agent Orchestration
 
 Coordinate the full development lifecycle: requirements → architecture → tasks → implementation → review → merge.
 
@@ -80,7 +80,7 @@ Phase 2: Task Spec Generation
 
 Phase 3: Implementation Loop
   For each task (in dependency order):
-    1. Launch task-implementer
+    1. Invoke task-implementation skill
     2. Launch code-reviewer
     3. If REQUEST CHANGES → loop back to step 1
     4. Verify build/tests pass
@@ -104,20 +104,62 @@ This creates `docs/tasks/task-<id>.md` for each task (e.g., `task-1.1.1.md`, `ta
 
 ## Phase 3: Implementation Loop
 
-Process tasks in the order specified in `docs/TASKS.md`.
-
 ### For each task:
 
-1. **Launch task-implementer:**
-   ```
-   Agent: task-implementer
-   Prompt: "Implement docs/tasks/task-<id>.md"
-   ```
+#### Step 1: Determine Task Doc
 
-2. **Merge and cleanup:**
-    Merge the branch, delete the worktree.
+Read the next unchecked task from `docs/TASKS.md` (in dependency order). Locate its spec at `docs/tasks/task-<id>.md`.
 
-3. **Mark complete:** Change `[ ]` to `[x]` in `docs/TASKS.md`
+#### Step 2: Implement
+
+Launch the **task-implementer** agent:
+```
+Task agent: task-implementer
+Prompt: "Implement task <id> from docs/tasks/task-<id>.md"
+```
+
+The agent creates a worktree, writes tests, implements, and opens a PR.
+
+#### Step 3: Code Review
+
+Launch the **code-reviewer** agent on the PR:
+```
+Task agent: code-reviewer
+Prompt: "Review PR #<number> against docs/tasks/task-<id>.md"
+```
+
+#### Step 4: Address Feedback (if REQUEST CHANGES)
+
+If the reviewer requests changes, re-launch **task-implementer** — the Review Feedback section in the task spec tells it what to fix:
+```
+Task agent: task-implementer
+Prompt: "Address review feedback for task <id>"
+```
+
+Then re-run Step 3. Repeat up to 3 cycles — escalate to user after that.
+
+#### Step 5: QA Verification
+
+After code review passes, wait for the Vercel preview deployment, then launch the **qa-verifier** agent:
+```bash
+# Wait for preview deployment to be ready
+gh pr checks <number> --watch
+```
+```
+Task agent: qa-verifier
+Prompt: "Verify manual QA checklist for PR #<number> against docs/tasks/task-<id>.md using the Vercel preview URL"
+```
+
+If QA fails, re-launch **task-implementer** with the QA report findings and loop back to Step 3.
+
+#### Step 6: Merge & Cleanup
+
+Once review and QA pass:
+1. Merge the PR (`gh pr merge --squash`)
+2. Remove the worktree (`git worktree remove .worktrees/<branch>`)
+3. Delete the branch (`git branch -d <branch>`)
+
+The task is already marked `[x]` in `docs/TASKS.md` by the task-implementer as part of the PR.
 
 ### Parallel Execution
 
